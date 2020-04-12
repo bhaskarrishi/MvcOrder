@@ -1,0 +1,92 @@
+﻿@model IEnumerable<MvcOrder.Models.Order>
+
+@{
+    ViewData["Title"] = "Index";
+    float TotQ = 0;
+    double Tax = 0;
+    double TOTAL = 0;
+    string FreeshipMsg = "";
+}
+
+<h2>Place order for Merchandise</h2>
+
+<p>
+    <a asp-action="Create">Add</a>
+</p>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Quantity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Totalqty)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Quantity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Totalqty)
+                    @{
+                        TotQ = TotQ + item.Totalqty;
+                    }
+
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+
+<br></br>
+
+
+<b>SubTotal : </b> @TotQ
+
+@{
+    if (TotQ > 100)
+    {
+        FreeshipMsg = "Hurray !!! Customer qualifies for free shipping ! ";
+    }
+    Tax = 0.15 * TotQ;
+    TOTAL = Tax + TotQ;
+}
+<br></br>
+
+<b>Tax : </b> @Tax
+<br></br>
+<b>Total : </b> @TOTAL
+<font color="red">@FreeshipMsg</font>
+<form>
+    <div class="form-group">
+        <input type="submit" value="Submit Order" class="btn btn-default" />
+    </div>
+</form>
